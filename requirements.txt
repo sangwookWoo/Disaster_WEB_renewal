@@ -1,0 +1,14 @@
+streamlit
+numpy
+pandas
+requests
+pytest==7.1.2
+seleniumbase==2.5.4
+opencv-python>=4.3
+folium
+streamlit-folium==0.8.1
+datetime
+bs4
+lxml
+streamlit-option-menu
+hydralit-components
