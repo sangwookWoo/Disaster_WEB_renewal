@@ -550,12 +550,12 @@ def main():
     theme_good = {'bgcolor': '#EFF8F7','title_color': 'green','content_color': 'green','icon_color': 'green', 'icon': 'fa fa-check-circle'}
 
     menu_data = [
-        {'icon': "🌊", 'label':"홍수관련 실시간 정보"},
-        {'icon':"☂️",'label':"실시간 초단기 기상정보"},
-        {'icon': "🧱",'label':"지진해일 대피소 정보"},
-        {'icon': "🏘️", 'label':"임시주거시설 정보"},
-        {'icon': "💊", 'label':"긴급구호물자 구매업체"},
-        {'icon': "🚑", 'label':"응급의료기관 정보 실시간 조회"},
+        {'icon': "🌊", 'label':"홍수 실시간 정보"},
+        {'icon':"☂️",'label':"실시간 단기 기상정보"},
+        {'icon': "🧱",'label':"지진해일 대피소"},
+        {'icon': "🏘️", 'label':"임시주거시설"},
+        {'icon': "💊", 'label':"긴급구호물자 업체"},
+        {'icon': "🚑", 'label':"응급의료기관 실시간 조회"},
     ]
 
     over_theme = {'txc_inactive': '#FFFFFF'}
