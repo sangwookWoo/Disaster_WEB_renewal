@@ -47,7 +47,8 @@ def home():
         for idx in df.index:
             if df.loc[idx,'홍수예보 종류'][-2:] == '발령':
                 list_.append(df.loc[idx, '주의 지역'])
-        warning_message = ",".join(list_)
+        
+        warning_message = ", ".join(set(list_))
         st.subheader("❗" + warning_message)
         st.write("해당 지역 거주자 분들은 혹시 모를 사태에 대비해주시기 바랍니다.(본래는 실시간이나 웹 구현을 위해 22/08/10으로 고정해두었습니다.)")
         df = df.set_index(['지점', '홍수예보 종류'])
