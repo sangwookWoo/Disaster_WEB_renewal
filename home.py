@@ -31,7 +31,7 @@ def home():
 
         #### 페이지 헤더, 서브헤더 제목 설정
         # 헤더
-        st.header("⛔홍수 특보 발령사항")
+        # st.header("⛔홍수 특보 발령사항")
 
         HydroType = 'getFldfct'
         DataType = 'list'
@@ -132,7 +132,7 @@ def weather():
             unsafe_allow_html=True,)
                 
                 
-    st.header("☂️실시간 초단기 기상정보")
+    # st.header("☂️실시간 초단기 기상정보")
     st.write("위치 정보 선택 후, 이후 6시간의 기상정보를 받아보세요🙏")
 
     cd_nm, sgg_nm, temperature, raining, sky, shape_rn, humidity, thunder, windspeed = weatherData()
@@ -321,57 +321,50 @@ def bo_map(data):
                 folium.Marker([coords.loc[idx, 'lat'], coords.loc[idx, 'lon']], icon = folium.Icon(color="purple"), tooltip = text).add_to(m)
         return m    
 
-def flood():
-    st.header("🌊홍수관련 실시간 정보")
-    st.write("위치 정보를 선택하여 가까운 관측소 실시간 정보를 받아보세요🙏")
-    
-    st.markdown("###### 지도가 표시되지 않는다면 시도 선택을 다시 시도해주세요.")
 
-
-
-    tab1, tab2, tab3 = st.tabs(["🌊실시간 수위 정보", '🏞️실시간 댐 정보', '🏞️실시간 보 정보'])
-    with tab1:
-        
-        cd_nm = st.selectbox('시도 선택',['전국','강원도', '충청북도', '경상북도', '경기도', '서울특별시', '충청남도', '대구광역시', '경상남도',
+def water():
+    st.subheader('실시간 수위 정보')
+    cd_nm = st.selectbox('시도 선택',['전국','강원도', '충청북도', '경상북도', '경기도', '서울특별시', '충청남도', '대구광역시', '경상남도',
                                             '전라북도', '부산광역시', '울산광역시', '대전광역시', '세종특별자치시', '전라남도', '광주광역시',
                                             '전남'])
-        with st.spinner('정보 조회 중입니다. 잠시 기다려주세요.'):
-            # 수위 데이터 조회
-            data = flowsite()
-            
-            # 지역별 수위 데이터
-            if cd_nm == "전국":
-                data = data
-            else :
-                data = data[data['시도명'] == cd_nm]
-            
-            # 수위 데이터 시각화
-            map = flow_map(data)
+    with st.spinner('정보 조회 중입니다. 잠시 기다려주세요.'):
+        # 수위 데이터 조회
+        data = flowsite()
+        
+        # 지역별 수위 데이터
+        if cd_nm == "전국":
+            data = data
+        else :
+            data = data[data['시도명'] == cd_nm]
+        
+        # 수위 데이터 시각화
+        map = flow_map(data)
+        # st_folium(map, returned_objects=[])
+        image = Image.open(os.path.join(filePath, 'using_data','수위.png'))
+        
+        col1, col2, col3 = st.columns(3)
+        with col1:
             st_folium(map, returned_objects=[])
-            image = Image.open(os.path.join(filePath, 'using_data','수위.png'))
+        with col2:
             st.markdown("###### 마커 색별 수위 정보")
             st.image(image, caption=None, width=None, use_column_width=None)
-            st.write(f"현재 {(datetime.now()+ timedelta(hours = 9)).strftime('%Y-%m-%d %H:%M:%S')} 기준, 10분 단위로 최신 업데이트 된 정보입니다. 해당 페이지는 한강홍수통제소의 데이터를 사용합니다😊")
+            st.write(f"현재 {datetime.now(timezone('Asia/Seoul')).strftime('%Y-%m-%d %H:%M:%S')} 기준, 10분 단위로 최신 업데이트 된 정보입니다.")
+            st.write("해당 페이지는 한강홍수통제소의 데이터를 사용합니다😊")
 
+def dam():
+    st.subheader('실시간 댐 정보')
+    with st.spinner('정보 조회 중입니다. 잠시 기다려주세요.'):
+        dam_data = dam_data_make()
+        m = dam_map(dam_data)
+        st_folium(m , returned_objects=[])
+        st.write(f"현재 {datetime.now(timezone('Asia/Seoul')).strftime('%Y-%m-%d %H:%M:%S')} 기준, 1시간 단위로 최신 업데이트 된 정보입니다. 해당 페이지는 한강홍수통제소의 데이터를 사용합니다😊")
 
-    with tab2:
-        with st.spinner('정보 조회 중입니다. 잠시 기다려주세요.'):
-            if st.button("전국 댐 정보보기 클릭"):
-                dam_data = dam_data_make()
-                m = dam_map(dam_data)
-                st_folium(m , returned_objects=[])
-                st.write(f"현재 {(datetime.now()+ timedelta(hours = 9)).strftime('%Y-%m-%d %H:%M:%S')} 기준, 1시간 단위로 최신 업데이트 된 정보입니다. 해당 페이지는 한강홍수통제소의 데이터를 사용합니다😊")
-                
-    with tab3:
-        with st.spinner('정보 조회 중입니다. 잠시 기다려주세요.'):
-            if st.button("전국 보 정보보기 클릭"):
-                bo_data = bo_data_make()
-                m = bo_map(bo_data)
-                st_folium(m, returned_objects=[])
-                st.write(f"현재 {(datetime.now()+ timedelta(hours = 9)).strftime('%Y-%m-%d %H:%M:%S')} 기준, 1시간 단위로 최신 업데이트 된 정보입니다. 해당 페이지는 한강홍수통제소의 데이터를 사용합니다😊")
-
-
-
+def bo():
+    st.subheader('실시간 보 정보')
+    bo_data = bo_data_make()
+    m = bo_map(bo_data)
+    st_folium(m, returned_objects=[])
+    st.write(f"현재 {datetime.now(timezone('Asia/Seoul')).strftime('%Y-%m-%d %H:%M:%S')} 기준, 1시간 단위로 최신 업데이트 된 정보입니다. 해당 페이지는 한강홍수통제소의 데이터를 사용합니다😊")
 
 def TsunamiShelter():
     pageNo = 1
@@ -396,7 +389,7 @@ def Shelter_map(data):
         return m
     
 def earthbreak():
-    st.header("🌊지진 해일 대피소 정보")
+    # st.header("🌊지진 해일 대피소 정보")
     st.write("지역을 선택하고 지도를 확대하면서, 가까운 지진해일 국내 대피소 정보를 받아보세요🙏")
     df = TsunamiShelter()
     sido_list = list(df['sido_name'].unique())
@@ -410,7 +403,7 @@ def earthbreak():
     
     
 def house():
-    st.header("🏘️임시주거시설 정보")
+    # st.header("🏘️임시주거시설 정보")
     st.write("위치 정보를 선택하고 지도를 확대하면서, 가까운 임시주거시설 정보를 찾으세요🙏")
     data_path = os.path.join(filePath,'using_data','temporary_house.csv')
     df = pd.read_csv(data_path)
@@ -437,15 +430,16 @@ def house():
         # popup 크기 설정
         text = coords.loc[idx,'시설명'] + '<br>상세주소 : ' + str(coords.loc[idx,'상세주소']) +'<br>시설면적 : ' + str(coords.loc[idx,'시설면적']) + '<br>주거능력 : ' + str(coords.loc[idx,'주거능력']) + '<br>관리부서 : ' + str(coords.loc[idx,'관리부서']) + '<br>지자체 담당자 연락처 : ' + str(coords.loc[idx,'지자체담당자연락처'])
         folium.Marker([coords.loc[idx,'위도'], coords.loc[idx,'경도']], icon = folium.Icon(color="purple"), tooltip = text).add_to(marker_cluster)
-        
+    
     st_folium(m, returned_objects=[])
-    df = df.set_index('시설명')
-    st.dataframe(data=df.drop(columns = ['시도명', '시군구명', '경도','위도']), use_container_width= True)
+    # with col2:
+    #     df = df.set_index('시설명')
+    #     st.dataframe(data=df.drop(columns = ['시도명', '시군구명', '경도','위도']), use_container_width= True)
     
 def mart():
     data_path = os.path.join(filePath,'using_data','구호물자정보.csv')
 
-    st.header("💊긴급구호물자 구매업체")
+    # st.header("💊긴급구호물자 구매업체")
     st.write("위치 정보를 선택하여 가까운 구매업체를 찾으세요🙏")
     df = pd.read_csv(data_path)
 
@@ -504,13 +498,13 @@ def hospital():
     data_path = os.path.join(filePath,'using_data','구호물자정보.csv')
 
     ####  title setting
-    st.header("🚑응급의료기관 정보 실시간 조회")
+    # st.header("🚑응급의료기관 정보 실시간 조회")
     st.write("위치 정보를 선택하여 가까운 응급의료기관과 병실현황을 조회하세요!🙏")
 
     ####  select box data
     df = pd.read_csv(data_path)
-    cd_nm = st.sidebar.selectbox('시도 선택',list(df['시도명'].unique()))
-    sgg_nm = st.sidebar.selectbox('시군구 선택',list(df[df['시도명'] == cd_nm]['시군구명'].unique()))
+    cd_nm = st.selectbox('시도 선택',list(df['시도명'].unique()))
+    sgg_nm = st.selectbox('시군구 선택',list(df[df['시도명'] == cd_nm]['시군구명'].unique()))
     df = df[(df['시도명'] == cd_nm) & (df['시군구명'] == sgg_nm)]
 
 
@@ -537,20 +531,27 @@ def hospital():
         except Exception as E:
             st.write("😓죄송합니다. 해당 지역에 의료시설이 없습니다.")
             
-def main():
+def main(): 
     #make it look nice from the start
     st.set_page_config(page_title = "⛔위기 대응 프로젝트", layout='wide', initial_sidebar_state='collapsed',)
-
     with st.sidebar:
         st.markdown('**본 페이지는 홍수 위기 상황 발생 시<br>국민들의 즉각적인 상황 대처를 위해<br>제작 되었습니다**', unsafe_allow_html= True)
         st.markdown('개발자 깃허브 : https://github.com/sangwookWoo')
+    
+    st.header(" ")
+    st.header(" ")
+    
+    # st.markdown("<h1 style='text-align: left; color: black;'>위기 대응 프로젝트</h1>", unsafe_allow_html=True)
+    # st.markdown("<h2 style='text-align: center; color: black;'>Smaller headline in black </h2>", unsafe_allow_html=True)
+    
+    
     #can apply customisation to almost all the properties of the card, including the progress bar
     theme_bad = {'bgcolor': '#FFF0F0','title_color': 'red','content_color': 'red','icon_color': 'red', 'icon': 'fa fa-times-circle'}
     theme_neutral = {'bgcolor': '#f9f9f9','title_color': 'orange','content_color': 'orange','icon_color': 'orange', 'icon': 'fa fa-question-circle'}
     theme_good = {'bgcolor': '#EFF8F7','title_color': 'green','content_color': 'green','icon_color': 'green', 'icon': 'fa fa-check-circle'}
 
     menu_data = [
-        {'icon': "🌊", 'label':"홍수 실시간 정보"},
+        {'icon': "🌊",'label':"수위 실시간 정보", 'submenu':[{'id':'subid1','label':"실시간 수위정보"},{'id':'subid2', 'label':"실시간 댐 정보"},{'id':'subid3', 'label':"실시간 보 정보"}]},
         {'icon':"☂️",'label':"실시간 단기 기상정보"},
         {'icon': "🧱",'label':"지진해일 대피소"},
         {'icon': "🏘️", 'label':"임시주거시설"},
@@ -566,13 +567,17 @@ def main():
         # login_name='Logout'
         hide_streamlit_markers=True, #will show the st hamburger as well as the navbar now!
         sticky_nav=True, #at the top or not
-        sticky_mode='pinned', #jumpy or not-jumpy, but sticky or pinned
+        sticky_mode='sticky', #jumpy or not-jumpy, but sticky or pinned
     )
     
     if menu_id == 'HOME':
         home()
-    elif menu_id == '홍수 실시간 정보':
-        flood()
+    elif menu_id == 'subid1':
+        water()
+    elif menu_id == 'subid2':
+        dam()
+    elif menu_id == 'subid3':
+        bo()
     elif menu_id == '실시간 단기 기상정보':
         weather()
     elif menu_id == '지진해일 대피소':
