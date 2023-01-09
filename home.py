@@ -35,9 +35,9 @@ def home():
 
         HydroType = 'getFldfct'
         DataType = 'list'
-        # Edt = '20220810'
+        Edt = '20220810'
         DocumentType = '.json'
-        Edt = datetime.today().strftime(("%Y%m%d"))
+        # Edt = datetime.today().strftime(("%Y%m%d"))
         df = flood_news(HydroType, DataType, Edt, DocumentType).drop(columns = 'links')
         df.columns = ['발표일시','발표자','수위도달 예상일시', '예상 수위표수위', '예상 해발수위', '홍수예보 종류', '홍수예보 번호', '지점', '기존발령일시', 
                     '비고','강명','변동상황', '현재 일시', '현재 수위표수위', '현재 해발수위', '예상 일시(변동)', '예상 수위표수위(변동)', '예상 해발수위(변동)', '관측소 코드', '주의 지역', 
@@ -49,7 +49,7 @@ def home():
                 list_.append(df.loc[idx, '주의 지역'])
         warning_message = ",".join(list_)
         st.subheader("❗" + warning_message)
-        st.write("해당 지역 거주자 분들은  \n  혹시 모를 사태에 대비해주시기 바랍니다.")
+        st.write("해당 지역 거주자 분들은 혹시 모를 사태에 대비해주시기 바랍니다.(본래는 실시간이나 웹 구현을 위해 22/08/10으로 고정해두었습니다.)")
         df = df.set_index(['지점', '홍수예보 종류'])
         # df[['홍수예보 종류', '강명', '변동상황', '주의지역', '주의강명']]
         st.dataframe(df)
@@ -412,10 +412,6 @@ def house():
     cd_nm = st.selectbox('시도 선택',list(df['시도명'].unique()))
     sgg_nm = st.selectbox('시군구 선택',list(df[df['시도명'] == cd_nm]['시군구명'].unique()))
     df = df[(df['시도명'] == cd_nm) & (df['시군구명'] == sgg_nm)]
-
-
-
-
 
     # 지도 시각화
     mapping_data = df[['위도','경도','시설명', '상세주소', '시설면적', '주거능력', '지자체담당자연락처','관리부서']]
