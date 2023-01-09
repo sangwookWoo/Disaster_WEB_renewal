@@ -563,7 +563,7 @@ def main():
         menu_definition = menu_data,
         override_theme = over_theme,
         home_name='HOME',
-        # login_name='Logout',
+        # login_name='Logout'
         hide_streamlit_markers=True, #will show the st hamburger as well as the navbar now!
         sticky_nav=True, #at the top or not
         sticky_mode='pinned', #jumpy or not-jumpy, but sticky or pinned
@@ -571,17 +571,17 @@ def main():
     
     if menu_id == 'HOME':
         home()
-    elif menu_id == '홍수관련 실시간 정보':
+    elif menu_id == '홍수 실시간 정보':
         flood()
-    elif menu_id == '실시간 초단기 기상정보':
+    elif menu_id == '실시간 단기 기상정보':
         weather()
-    elif menu_id == '지진해일 대피소 정보':
+    elif menu_id == '지진해일 대피소':
         earthbreak()
-    elif menu_id == '임시주거시설 정보':
+    elif menu_id == '임시주거시설':
         house()
-    elif menu_id == '긴급구호물자 구매업체':
+    elif menu_id == '긴급구호물자 업체':
         mart()
-    elif menu_id == '응급의료기관 정보 실시간 조회':
+    elif menu_id == '응급의료기관 실시간 조회':
         hospital()
     
 
