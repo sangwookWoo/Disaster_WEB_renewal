@@ -533,7 +533,7 @@ def main():
     st.set_page_config(page_title = "⛔위기 대응 프로젝트", layout='wide', initial_sidebar_state='collapsed',)
     with st.sidebar:
         st.markdown('**본 페이지는 홍수 위기 상황 발생 시<br>국민들의 즉각적인 상황 대처를 위해<br>제작 되었습니다**', unsafe_allow_html= True)
-        st.markdown('개발자 깃허브 : https://github.com/sangwookWoo')
+        # st.markdown('개발자 깃허브 : https://github.com/sangwookWoo')
     
     st.header(" ")
     st.header(" ")
